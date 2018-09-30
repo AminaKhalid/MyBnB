@@ -30,4 +30,5 @@ public class CalculateTotalIncome
 		//return the value of calculation
 		return TotalRentalIncome;
 	}
+
 }

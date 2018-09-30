@@ -1,70 +1,78 @@
 //import packages
-import java.awt.Font;
-import java.awt.GridLayout;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.PrintWriter;
 import java.util.ArrayList;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.UIManager;
 
 //PrintAllProperties Class
 public class PrintAllProperties 
 {
-	PrintAllProperties()
-	{
-
-	}
-
 	//PAP(Print All Properties) takes the ArrayList parameters, aparment, house and villa
-	public void PAP(ArrayList<Apartment> apartment,ArrayList<House> house, ArrayList<Villa> villa)
+	public void PAP(ArrayList<Apartment> apartment,ArrayList<House> house, ArrayList<Villa> villa) throws FileNotFoundException
 	{
-		//create JFrame and set dimensions
-		JFrame frame = new JFrame("MyBnB");
-		frame.setLayout(new GridLayout(15, 0));
-		frame.setSize(1000, 600);
 
-		//print apartment details onto the JFrame and getting details using JOption Pane
-		UIManager.put("OptionPane.messageFont", new Font("Arial", Font.BOLD, 14));
-		frame.getContentPane().add(new JOptionPane("APARTMENTS"));
-		frame.getContentPane().add(new JOptionPane("Reg. Number    Name           Address                      Rental Days         Cost Per Day(€)       No of Storys      No of Beds"));
-		UIManager.put("OptionPane.messageFont", new Font("Arial", Font.PLAIN, 14)); //set font
-		
-		//get details from accessors created in subclass apartment
-		for(int i=0;i<apartment.size();i++)
-		{
-			frame.getContentPane().add(new JOptionPane(("     "+apartment.get(i).getRegNum()+"                  "+apartment.get(i).getName()+"           "+apartment.get(i).getPostalAddress()+"                         "+apartment.get(i).getTotalRentalDays()+"                           "+
-					apartment.get(i).getRentalCost()+"                          "+apartment.get(i).getStoryNum()+"                     "+apartment.get(i).getBedNum())));
-		}
-		
-		//print house details onto the JFrame and getting details using JOption Pane
-		UIManager.put("OptionPane.messageFont", new Font("Arial", Font.BOLD, 14)); //set font
-		frame.getContentPane().add(new JOptionPane("HOUSES"));
-		frame.getContentPane().add(new JOptionPane("Reg. Number     Name           Address                      Rental Days         Cost Per Day(€)       No of Storys       Clearing Fees"));
-		UIManager.put("OptionPane.messageFont", new Font("Arial", Font.PLAIN, 14)); //set font
+		//redirecting print all properties to the outputProperty.txt
+		File OutputProperty = new File("OutputProperty.txt");
 
-		//get details from accessors created in subclass house
-		for(int i=0;i<house.size();i++)
+		try 
 		{
-			frame.getContentPane().add(new JOptionPane("     "+house.get(i).getRegNum()+"                  "+house.get(i).getName()+"           "+house.get(i).getPostalAddress()+"                         "+house.get(i).getTotalRentalDays()+"                           "+
-					house.get(i).getRentalCost()+"                          "+house.get(i).getTotalNumberOfStorys()+"                     "+house.get(i).getClearingFees()));
+			//if file exists print 'file exists'
+			if (OutputProperty.exists()) 
+
+			{
+				System.out.println("----File exists----");
+			}
+			//else print created now
+			else
+			{
+				System.out.println("----Created File----");
+				OutputProperty.createNewFile();
+			}
+		} 
+
+		catch(Exception e)
+		{
+			e.printStackTrace();
 		}
 
-		//print villa details onto the JFrame and getting details using JOption Pane
-		UIManager.put("OptionPane.messageFont", new Font("Arial", Font.BOLD, 14)); //set font
-		frame.getContentPane().add(new JOptionPane("VILLAS"));
-		frame.getContentPane().add(new JOptionPane("Reg. Number     Name           Address                     Rental Days         Cost Per Day(€)       No of Rooms     Service Cost       Luxury Tax"));
-		UIManager.put("OptionPane.messageFont", new Font("Arial", Font.PLAIN, 14)); //set font
-		 
-		//get details from accessors created in subclass villa
-		for(int i=0;i<villa.size();i++)
+		try
 		{
-			frame.getContentPane().add(new JOptionPane("     "+villa.get(i).getRegNum()+"              "+villa.get(i).getName()+"           "+villa.get(i).getPostalAddress()+"                         "+villa.get(i).getTotalRentalDays()+"                           "+
-					villa.get(i).getRentalCost()+"                          "+villa.get(i).getNumberOfRooms()+"                     "+villa.get(i).getServiceCost()+"                     "+villa.get(i).getLuxuryTax()));
+			//get details from accessors created in subclass apartment
+			PrintWriter printWriter=new PrintWriter(new FileWriter("OutputProperty.txt",false));
+			printWriter.write("\nAPARTMENT"+"\n");
+			printWriter.write("\n \nReg. Number    Name    Address     Rental Days     Cost Per Day(€)     No of Storys    No of Beds\n");
+			for(int i=0;i<apartment.size();i++)
+			{       
+
+				printWriter.write("     "+apartment.get(i).getRegNum()+" "+apartment.get(i).getName()+"  "+apartment.get(i).getPostalAddress()+"  "+apartment.get(i).getTotalRentalDays()+"  "+
+						apartment.get(i).getRentalCost()+" "+apartment.get(i).getStoryNum()+" "+apartment.get(i).getBedNum()+"\n");
+			}    	
+
+			//get details from accessors created in subclass house
+			printWriter.write("\n\n"+"HOUSE"+"\n\n");
+			printWriter.write("\n"+"\nReg. Number     Name   Address    Rental Days    Cost Per Day(€)   No of Storys   Clearing Fees"+"\n");
+			for(int i1=0;i1<house.size();i1++) 
+			{
+				printWriter.write(""+house.get(i1).getRegNum()+" "+house.get(i1).getName()+" "+house.get(i1).getPostalAddress()+" "+house.get(i1).getTotalRentalDays()+"   "+
+						house.get(i1).getRentalCost()+"  "+house.get(i1).getTotalNumberOfStorys()+"  "+house.get(i1).getClearingFees()+"\n");
+			}    
+
+			//get details from accessors created in subclass villa
+			printWriter.write("\n\n"+"VILLA"+"\n");
+			printWriter.write("\nReg. Number     Name    Address   Rental Days   Cost Per Day(€)    No of Rooms     Service Cost   Luxury Tax\"\n"+ ""+ "");
+
+			for(int j=0;j<villa.size();j++) 
+			{
+				printWriter.write(""+villa.get(j).getRegNum()+" "+villa.get(j).getName()+" "+villa.get(j).getPostalAddress()+"  "+villa.get(j).getTotalRentalDays()+"  "+
+						villa.get(j).getRentalCost()+"  "+villa.get(j).getNumberOfRooms()+"    "+villa.get(j).getServiceCost()+"   "+villa.get(j).getLuxuryTax()+"\n");
+
+			}
+			printWriter.close();
+
 		}
-
-		//show frame
-		frame.setVisible(true);
-		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-	} 
-
-
-}	
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+}

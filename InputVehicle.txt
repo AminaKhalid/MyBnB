@@ -1,0 +1,8 @@
+1 George 4 50 2
+1 John 5 60 1
+2 Jane 3 40 80
+2 John 2 20 70 
+1 Jane 4 40 1
+1 George 1 10 1
+1 John 2 20 2
+2 Jane 3 30 60
